@@ -6101,11 +6101,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3158740556409092522, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: acceleration
-      value: 80
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3158740556409092522, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: deceleration
-      value: 40
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3373907914418959853, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: m_Name

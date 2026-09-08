@@ -104,5 +104,10 @@ public class Movement : MonoBehaviour
             isGrounded = false;
         }
     }
-
+    
+// Permite que superficies externas alteren el frenado
+public void SetDeceleration(float nuevoValor)
+{
+    deceleration = nuevoValor;
+}
 }
