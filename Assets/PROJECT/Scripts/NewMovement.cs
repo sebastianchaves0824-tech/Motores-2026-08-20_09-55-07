@@ -13,8 +13,8 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Salto")]
     [SerializeField] private float jumpForce = 12f;
-    [Range(0f, 1f)]
-    [SerializeField] private float airControl = 0.6f; // Cuánto control tiene el jugador en el aire (0.6 = 60%)
+    [Range(0f, 1f)] // esto nos permite generar un slider en el inspector
+    [SerializeField] private float airControl = 0.6f; // cuanto vamos a poder mover a nuestro personaje en el aire 
 
     [Header("Físicas y Gravedad")]
     [SerializeField] private float gravityScale = 2.5f;     // Gravedad base multiplicada
