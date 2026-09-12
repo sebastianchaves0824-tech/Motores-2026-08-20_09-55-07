@@ -7,12 +7,12 @@ public class PlayerMovement : MonoBehaviour
 {
     // poner el header hace que quede lindo en el inspector de Unity, pero no hace nada más
     [Header("Movimiento")]
-    [SerializeField] private float maxSpeed = 10f; // que tan rápido se va a mover la mulita
-    [SerializeField] private float acceleration = 60f; //
-    [SerializeField] private float deceleration = 50f;
+    public float maxSpeed = 10f; // que tan rápido se va a mover la mulita
+    public float acceleration = 60f; //
+    public float deceleration = 50f;
 
     [Header("Salto")]
-    [SerializeField] private float jumpForce = 12f;
+    public float jumpForce = 12f;
     [Range(0f, 1f)] // esto nos permite generar un slider en el inspector
     [SerializeField] private float airControl = 0.6f; // cuanto vamos a poder mover a nuestro personaje en el aire 
 
