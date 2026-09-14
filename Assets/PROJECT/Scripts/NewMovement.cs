@@ -20,11 +20,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravityScale = 2.5f;     // Gravedad base multiplicada
     [SerializeField] private float fallMultiplier = 2f;      // Gravedad extra al caer para evitar flotar
 
+    [Header("Ajustes de Pendiente")]                         
+    [Tooltip("Multiplicador extra de velocidad al bajar una pendiente")] 
+    //muestra un tooltip en el inspector para saber que
+    //modifica esta variable 
+    [SerializeField] private float bonusBajada = 1.5f;        // Porcentaje de velocidad extra al bajar una pendiente (1.5 = 150%)
+
+    [Tooltip("Porcentaje de velocidad retenida al subir (0.4 = 40%)")]
+    //muestra un tooltip en el inspector para saber que
+    //modifica esta variable
+
+    [Range(0.1f, 1f)] // esto nos permite generar un slider en el inspector
+    [SerializeField] private float penalizacionSubida = 0.4f;
+
+    private Vector3 groundNormal = Vector3.up;
     private bool isJumping;
     private Rigidbody rb;
     private PlayerInput playerInput;
     private Vector3 movementDirection;
     private bool isGrounded;
+    private bool estaEnHielo = false;
+    private float desaceleracionPendienteRestaurar = -1f;
 
     private void Awake()
     {
@@ -54,7 +70,8 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         Vector3 actualVelocity = rb.linearVelocity;
-        Vector3 targetVelocity = movementDirection * maxSpeed; //definimos la velocidad deseada como el vector direccion por la magnitud que deseamos (maxspeed)
+        float currentMaxSpeed = CalcularVelocidadPorPendiente();
+        Vector3 targetVelocity = movementDirection * currentMaxSpeed; //definimos la velocidad deseada como el vector direccion por la magnitud que deseamos (maxspeed)
         // para cambiar la velocidad del personaje vamos a definir la velocidad máxima a la que queremos llegar y luego 
         // utilizar la funcion MoveTowards para que vaya llevando la velocidad hasta ese límite, con la tasa de cambio de velocityChange
         float velocityChange;
@@ -79,7 +96,28 @@ public class PlayerMovement : MonoBehaviour
         // en esta linea cambiamos efectivamente la velocidad del rigidbody, conservando la velocidad vertical para no modificar el salto
         rb.linearVelocity = new Vector3(newVelocity.x, actualVelocity.y, newVelocity.z);
     }
+        // Aca permitimos que superficies como el hielo modifiquen el frenado
+    public void SetDeceleration(float nuevoValor)
+    {
+        deceleration = nuevoValor;
+        estaEnHielo = true;
+        desaceleracionPendienteRestaurar = -1f;
+    }
 
+    public void SalirDeSuperficieHielo(float valorNormal)
+    {
+        estaEnHielo = false;
+
+        // Si salio del hielo porque salto, guarda el valor para restaurarlo recién cuando aterrice
+        if (!isGrounded)
+        {
+            desaceleracionPendienteRestaurar = valorNormal;
+        }
+        else
+        {
+            deceleration = valorNormal;
+        }
+    }
     private void CustomGravity()
     {
         // guardamos el valor de la gravedad de unity
@@ -123,22 +161,57 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
-    }
-
-    private void GroundCheck()
-    {
-        // esta es una forma "sencilla" de determinar si el personaje esta en el piso y puede saltar o no
+    } 
+private void GroundCheck()// esta es una forma "sencilla" de determinar si el personaje esta en el piso y puede saltar o no
         // el raycast tira un rayo para abajo 
         // si detecta un objeto Physics.Raycast nos devuelve un booleano con valor true y si no detecta nada nos devuelve false
+        // tambien nos permite obtener información del objeto que detecta, como la normal de la superficie, la distancia, etc
+    {
         Ray ray = new Ray(transform.position, Vector3.down);
-        Debug.DrawRay(ray.origin, ray.direction * 1f, Color.green);
-        if (Physics.Raycast(ray, 1f))
+        Debug.DrawRay(ray.origin, ray.direction * 1.1f, Color.green);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1.1f))
         {
+            // Si estaba en el aire y acaba de aterrizar fuera del hielo, restaura la desaceleracion
+            if (!isGrounded && desaceleracionPendienteRestaurar > 0f && !estaEnHielo)
+            {
+                deceleration = desaceleracionPendienteRestaurar;
+                desaceleracionPendienteRestaurar = -1f;
+            }
+
             isGrounded = true;
+            groundNormal = hit.normal;
         }
         else
         {
             isGrounded = false;
+            groundNormal = Vector3.up;
         }
+    }
+    private float CalcularVelocidadPorPendiente()  
+    //aca vamos a calcular la velocidad máxima que puede tener el personaje 
+    //dependiendo de si está subiendo o bajando una pendiente
+    {
+        if (!isGrounded || groundNormal == Vector3.up)
+        {
+            return maxSpeed;
+        }
+
+        // Vector hacia donde cae la colina
+        Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, groundNormal).normalized;
+
+        // Dot = +1 (Bajando la pendiente), Dot = -1 (Subiendo la pendiente)
+        float slopeDot = Vector3.Dot(movementDirection, slopeDirection);
+
+        if (slopeDot > 0.05f)
+        {
+            return maxSpeed * Mathf.Lerp(1f, bonusBajada, slopeDot);
+        }
+        else if (slopeDot < -0.05f)
+        {
+            return maxSpeed * Mathf.Lerp(1f, penalizacionSubida, -slopeDot);
+        }
+
+        return maxSpeed;
     }
 }
