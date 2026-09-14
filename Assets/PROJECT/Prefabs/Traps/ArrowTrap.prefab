@@ -629,6 +629,7 @@ MonoBehaviour:
   Point2: {fileID: 2218242114350903299}
   Point3: {fileID: 5745001478890200052}
   tiempoDisparo: 1
+  tiempoDeVidaFlechas: 1
 --- !u!1 &4402808960215807670
 GameObject:
   m_ObjectHideFlags: 0

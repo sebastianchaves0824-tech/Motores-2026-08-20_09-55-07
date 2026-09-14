@@ -2112,10 +2112,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062055e211b5a1a428d8b94c79192597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CannonTrap
-  projectilePrefab: {fileID: 277040373325686904, guid: 83fa3c8255e4f604a98500ca98d087ce, type: 3}
+  projectilePrefab: {fileID: 754213811746804149, guid: 597e018202eade44a93e654d01321dd4, type: 3}
   firePoint: {fileID: 5603390572232738049}
-  projectileSpeed: 12
-  fireRate: 2.5
+  projectileSpeed: 1
+  fireRate: 1
   initialDelay: 1
 --- !u!1 &3454760811328074103
 GameObject:
