@@ -24,6 +24,7 @@ public class CannonTrap : MonoBehaviour
         if (projectile != null)
         {
             projectile.Launch(firePoint.forward, projectileSpeed);
+            SoundFXManager.Instance.Play3DSound("CannonClip", transform.position, volume: 1f);
         }
     }
 

@@ -32,6 +32,12 @@ public class PlayerMovement : MonoBehaviour
 
     [Range(0.1f, 1f)] // esto nos permite generar un slider en el inspector
     [SerializeField] private float penalizacionSubida = 0.4f;
+    
+    
+
+
+
+   
 
     private Vector3 groundNormal = Vector3.up;
     private bool isJumping;
@@ -46,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
+        
 
     }
 
@@ -156,6 +163,7 @@ public class PlayerMovement : MonoBehaviour
             // no nos pase que el salto es distinto por eso, de esta manera siempre saltara lo mismo
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            SoundFXManager.Instance.Play3DSound("JumpClip", transform.position, volume: 1f);
         }
         if (context.canceled)
         {

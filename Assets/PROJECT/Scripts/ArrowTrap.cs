@@ -24,6 +24,7 @@ public class ArrowTrap : MonoBehaviour
             GameObject flecha1 = Instantiate(flecha, Point1.position, Point1.rotation);
             GameObject flecha2 = Instantiate(flecha, Point2.position, Point2.rotation);
             GameObject flecha3 = Instantiate(flecha, Point3.position, Point3.rotation);
+            SoundFXManager.Instance.Play3DSound("ArrowClip", transform.position, volume: 1f);
 
             // Programar su destrucción automática tras transcurrir tiempoDeVidaFlechas
             Destroy(flecha1, tiempoDeVidaFlechas);
