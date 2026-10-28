@@ -42,6 +42,7 @@ public class FallingPlatform : MonoBehaviour
         if (other.CompareTag("Player")) 
         {
             StartCoroutine(FallPlatform());
+            SoundFXManager.Instance.Play3DSound("CrackClip", transform.position, volume: 1f);
         }
     }
 
