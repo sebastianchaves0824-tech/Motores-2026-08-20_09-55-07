@@ -8,11 +8,11 @@ public class SoundFXManager : MonoBehaviour
 
     public static SoundFXManager Instance { get; private set; }
 
-    [Header("Pool Settings")]
+    [Header("Pool")]
     [SerializeField] private GameObject audioSourcePrefab;
     [SerializeField] private int poolSize = 20;
 
-    [Header("Audio Mixer Integration")]
+    [Header("Audio Mixer")]
 
     [SerializeField] private AudioMixerGroup sfxMixerGroup;
 
