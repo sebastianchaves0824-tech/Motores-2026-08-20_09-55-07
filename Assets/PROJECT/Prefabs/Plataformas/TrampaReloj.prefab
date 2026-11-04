@@ -2582,10 +2582,56 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -16361763534527979, guid: 0d83e954bb4060b4ab8f6eda3bc94b49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1380425732071785984}
+    - targetCorrespondingSourceObject: {fileID: -16361763534527979, guid: 0d83e954bb4060b4ab8f6eda3bc94b49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3775389193428778113}
   m_SourcePrefab: {fileID: -4161369568681901532, guid: 0d83e954bb4060b4ab8f6eda3bc94b49, type: 3}
 --- !u!4 &227757894337455720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2675634312391628914, guid: 0d83e954bb4060b4ab8f6eda3bc94b49, type: 3}
   m_PrefabInstance: {fileID: 2740699454275681818}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6470886178988317711 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -16361763534527979, guid: 0d83e954bb4060b4ab8f6eda3bc94b49, type: 3}
+  m_PrefabInstance: {fileID: 2740699454275681818}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1380425732071785984
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6470886178988317711}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.82933915
+  m_Height: 3.259019
+  m_Direction: 1
+  m_Center: {x: 0.052923944, y: 2.2264931, z: -0.00000012308594}
+--- !u!114 &3775389193428778113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6470886178988317711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88ee3891069c2b4180c35c264c6ea4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Killers
