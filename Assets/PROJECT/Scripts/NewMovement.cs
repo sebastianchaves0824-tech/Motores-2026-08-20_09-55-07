@@ -1,5 +1,7 @@
 using UnityEngine;
+
 using UnityEngine.InputSystem;
+
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -10,6 +12,18 @@ public class PlayerMovement : MonoBehaviour
     public float maxSpeed = 10f; // que tan rápido se va a mover la mulita
     public float acceleration = 60f; //
     public float deceleration = 50f;
+    
+    //ayudin para el insopector
+    [Header("Referencias de Transformación Visual")]
+    [Tooltip("Arrastrá el objeto padre de la mulita parada (ej: boina o cuerpo)")]
+    [SerializeField] private GameObject visualDePie;
+
+    [Tooltip("Arrastrá el objeto de la esfera (mulita esfera)")]
+    [SerializeField] private GameObject visualEsfera;
+
+    [Tooltip("Velocidad mínima en el plano horizontal para transformarse")]
+    [SerializeField] private float umbralMovimiento = 0.2f;
+    
 
     [Header("Salto")]
     public float jumpForce = 12f;
@@ -66,12 +80,36 @@ public class PlayerMovement : MonoBehaviour
         // de otra manera podria hacer que yendo en diagonal sea mas rapido 
 
         GroundCheck(); // en cada frame me fijo si está en el piso o no
+        ActualizarEstadoVisual(); // actualizamos el estado visual del personaje según si está en el piso o en el aire
+    }
+        private void ActualizarEstadoVisual()
+    {
+        if (visualDePie == null || visualEsfera == null || rb == null) return;
+
+        // Si usás Unity 6 se usa rb.linearVelocity. Si tu versión da error, cambialo por rb.velocity
+        Vector3 velocidadPlana = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        bool estaMoviendose = velocidadPlana.magnitude > umbralMovimiento;
+
+        if (estaMoviendose)
+        {
+            // Rodando como esfera
+            if (visualDePie.activeSelf) visualDePie.SetActive(false);
+            if (!visualEsfera.activeSelf) visualEsfera.SetActive(true);
+        }
+        else
+        {
+            // Quieta de pie
+            if (!visualDePie.activeSelf) visualDePie.SetActive(true);
+            if (visualEsfera.activeSelf) visualEsfera.SetActive(false);
+        }
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
         CustomGravity();
+
+        
     }
 
     private void MovePlayer()
