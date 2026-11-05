@@ -2,13 +2,17 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    [SerializeField] private Transform puntoSpawnPersonalizado;
+
     private void OnTriggerEnter(Collider other)
     {
         SpawnSetter player = other.GetComponent<SpawnSetter>();
         SoundFXManager.Instance.Play3DSound("CheckpointClip", transform.position, volume: 1f);
         if (player != null)
         {
-            player.SetSpawnPoint(transform);
+            // Si no asignas nada en el inspector, usa el propio transform por defecto
+            Transform destino = puntoSpawnPersonalizado != null ? puntoSpawnPersonalizado : transform;
+            player.SetSpawnPoint(destino);
         }
     }
 }
