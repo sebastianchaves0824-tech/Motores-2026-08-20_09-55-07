@@ -18,7 +18,7 @@ public class TrampaTecho : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("se detecta el trigger");
+       
         rbTrampa.useGravity = true;
     }
 }
