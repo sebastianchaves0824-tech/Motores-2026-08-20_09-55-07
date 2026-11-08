@@ -14,10 +14,10 @@ public class CoinCollect : MonoBehaviour
       if(other.transform.tag == "Coin") 
         { 
           coin++;
-            coinText.text = "Coins: " + coin.ToString();
-            Debug.Log(coin);
-            Destroy(other.gameObject);
-            SoundFXManager.Instance.Play3DSound("CoinClip", transform.position, volume: 1f);
+          coinText.text = "Coins: " + coin.ToString();
+          Debug.Log(coin);
+          Destroy(other.gameObject);
+          SoundFXManager.Instance.Play3DSound("CoinClip", transform.position, volume: 1f);
 
         }
     }
