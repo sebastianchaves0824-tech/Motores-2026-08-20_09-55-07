@@ -46,12 +46,13 @@ public class PlayerMovement : MonoBehaviour
 
     [Range(0.1f, 1f)] // esto nos permite generar un slider en el inspector
     [SerializeField] private float penalizacionSubida = 0.4f;
-    
-    
+
+    [Header("Particulas")]
+
+    [SerializeField]  ParticleSystem particulaSalto;
 
 
 
-   
 
     private Vector3 groundNormal = Vector3.up;
     private bool isJumping;
@@ -199,6 +200,7 @@ public class PlayerMovement : MonoBehaviour
             // antes de saltar ponemos la velocidad en 0, esto sirve para que si por alguna razon tenemos velocidad en y
             // por ejemplo al bajar una pendiente, o por una plataforma que nos mueve para arriba
             // no nos pase que el salto es distinto por eso, de esta manera siempre saltara lo mismo
+            crearParticulaSalto();
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             SoundFXManager.Instance.Play3DSound("JumpClip", transform.position, volume: 1f);
@@ -259,5 +261,9 @@ private void GroundCheck()// esta es una forma "sencilla" de determinar si el pe
         }
 
         return maxSpeed;
+    }
+    private void crearParticulaSalto()
+    {
+        particulaSalto.Play();
     }
 }
