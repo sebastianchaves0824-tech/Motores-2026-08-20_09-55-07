@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 
 public class PlayerHealth : MonoBehaviour
@@ -14,6 +15,12 @@ public class PlayerHealth : MonoBehaviour
     [Header("Eventos")]
     public UnityEvent<int> onHealthChanged; // Avisa a la UI cuántas vidas quedan
     public UnityEvent onGameOver;           // Dispara pantalla de derrota
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] damageVoiceLines; // Array para poner varias frases de daño
+    [SerializeField] private AudioMixerGroup grupoMixer;
+
 
     private int vidasActuales;
     private bool esInvulnerable = false;
@@ -32,6 +39,17 @@ public class PlayerHealth : MonoBehaviour
     private void Start()
     {
         onHealthChanged?.Invoke(vidasActuales);
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        // Asignamos el Audio Mixer Group al AudioSource si ambos existen
+        if (audioSource != null && grupoMixer != null)
+        {
+            audioSource.outputAudioMixerGroup = grupoMixer;
+        }
     }
 
     public void RecibirDanio(int cantidad = 1)
@@ -40,6 +58,8 @@ public class PlayerHealth : MonoBehaviour
 
         vidasActuales -= cantidad;
         onHealthChanged?.Invoke(vidasActuales);
+
+        PlayDamageVoiceLine();
 
         if (vidasActuales <= 0)
         {
@@ -93,4 +113,23 @@ public class PlayerHealth : MonoBehaviour
     {
         puntoSpawn = nuevoSpawn;
     }
+
+    private void PlayDamageVoiceLine()
+    {
+        // Verificamos que haya clips asignados y que el AudioSource no esté sonando ya 
+        if (damageVoiceLines != null && damageVoiceLines.Length > 0)
+        {
+
+            if (audioSource.isPlaying) return;
+
+            // Seleccionamos un clip al azar del array
+            int randomIndex = Random.Range(0, damageVoiceLines.Length);
+            AudioClip clipToPlay = damageVoiceLines[randomIndex];
+
+            // Reproducimos el clip usando el AudioSource configurado con el Audio Mixer
+            audioSource.PlayOneShot(clipToPlay);
+        }
+    }
+
+
 }
