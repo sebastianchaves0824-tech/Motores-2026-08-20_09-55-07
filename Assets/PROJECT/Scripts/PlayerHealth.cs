@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,10 @@ public class PlayerHealth : MonoBehaviour
     [Header("Referencia a la UI")]
     [SerializeField] private HeartUI heartUI;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] damageVoiceLines; // Array para poner varias frases de daño
+    [SerializeField] private AudioMixerGroup grupoMixer;
     public UnityEvent onDeath;
 
     private Vector3 puntoSpawnActual;
@@ -30,12 +35,24 @@ public class PlayerHealth : MonoBehaviour
         {
             heartUI.UpdateHearts(currentHealth);
         }
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
+        if (audioSource != null && grupoMixer != null)
+        {
+            audioSource.outputAudioMixerGroup = grupoMixer;
+        }
     }
 
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+        PlayDamageVoiceLine();
 
         if (heartUI != null)
         {
@@ -94,4 +111,20 @@ public class PlayerHealth : MonoBehaviour
 {
     SceneManager.LoadScene(nombreEscena);
 }
+    private void PlayDamageVoiceLine()
+    {
+        // Verificamos que haya clips asignados y que el AudioSource no esté sonando ya 
+        if (damageVoiceLines != null && damageVoiceLines.Length > 0)
+        {
+
+            if (audioSource.isPlaying) return;
+
+            // Seleccionamos un clip al azar del array
+            int randomIndex = Random.Range(0, damageVoiceLines.Length);
+            AudioClip clipToPlay = damageVoiceLines[randomIndex];
+
+            // Reproducimos el clip usando el AudioSource configurado con el Audio Mixer
+            audioSource.PlayOneShot(clipToPlay);
+        }
+    }
 }

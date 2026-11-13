@@ -683,6 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88ee3891069c2b4180c35c264c6ea4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Killers
+  danio: 1
 --- !u!1 &151222917
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,6 +1673,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: a0fbeb571ed114dc29e75de4226e56c5, type: 3}
   - name: CannonClip
     clip: {fileID: 8300000, guid: 38db8e57c57fc4128936a857592590e1, type: 3}
+  - name: ArrowClip
+    clip: {fileID: 8300000, guid: 622cdecfcf58444d7be5352e4209020a, type: 3}
+  - name: CoinClip
+    clip: {fileID: 8300000, guid: 16c2014c8ef50476c8d7b7b8f1e3205f, type: 3}
+  - name: CoinClip
+    clip: {fileID: 8300000, guid: 141b984e459bc422c8c0e500b4f52d92, type: 3}
+  - name: CoinClip
+    clip: {fileID: 8300000, guid: 76827b774477f4a30816b9316be1c941, type: 3}
 --- !u!4 &532476799
 Transform:
   m_ObjectHideFlags: 0
@@ -4155,6 +4164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88ee3891069c2b4180c35c264c6ea4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Killers
+  danio: 1
 --- !u!135 &1238751210
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4413,6 +4423,30 @@ PrefabInstance:
       propertyPath: 'damageVoiceLines.Array.data[2]'
       value: 
       objectReference: {fileID: 8300000, guid: 9996d9496842dea4ab825fbf0cb2726b, type: 3}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.7152896
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.286331
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.000000060716445
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.000000013178793
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9772446
+      objectReference: {fileID: 0}
+    - target: {fileID: 6783166660121179350, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.21211559
+      objectReference: {fileID: 0}
     - target: {fileID: 7562265474826772335, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: field of view
       value: 64.5
@@ -4420,6 +4454,26 @@ PrefabInstance:
     - target: {fileID: 8016181972460117267, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: Lens.FieldOfView
       value: 64.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514927024122521427, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.286331
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514927024122521427, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000006071644
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514927024122521427, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000000131787905
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514927024122521427, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.9772446
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514927024122521427, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.21211557
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
