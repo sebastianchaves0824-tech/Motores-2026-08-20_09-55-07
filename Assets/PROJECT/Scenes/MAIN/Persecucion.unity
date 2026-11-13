@@ -3323,6 +3323,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1114169325}
   - {fileID: 2098813499}
   - {fileID: 151222918}
   - {fileID: 2049802629}
@@ -3427,6 +3428,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8836e27babcf0f448ba09e076b03bbc, type: 3}
+--- !u!1 &1114169324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114169325}
+  m_Layer: 0
+  m_Name: Punto 0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1114169325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114169324}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.74, z: 9.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1104560494}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1131457087
 Mesh:
   m_ObjectHideFlags: 0
@@ -4099,6 +4131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAsesina
   waypoints:
+  - {fileID: 1114169325}
   - {fileID: 2098813499}
   - {fileID: 151222918}
   - {fileID: 2049802629}
@@ -4110,6 +4143,39 @@ MonoBehaviour:
   rotationMultiplier: 10
   player: {fileID: 851932218}
   killDistance: 1
+--- !u!114 &1238751209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238751207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d88ee3891069c2b4180c35c264c6ea4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Killers
+--- !u!135 &1238751210
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1238751207}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.6467301
+  m_Center: {x: 0, y: 0, z: -0.0515278}
 --- !u!1001 &1254793907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5233,6 +5299,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -3392460152581634643, guid: 4661f5804037c0745a5bb85f371dc59a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1238751208}
+    - targetCorrespondingSourceObject: {fileID: -3392460152581634643, guid: 4661f5804037c0745a5bb85f371dc59a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1238751210}
+    - targetCorrespondingSourceObject: {fileID: -3392460152581634643, guid: 4661f5804037c0745a5bb85f371dc59a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1238751209}
   m_SourcePrefab: {fileID: -4161369568681901532, guid: 4661f5804037c0745a5bb85f371dc59a, type: 3}
 --- !u!1 &1719252544 stripped
 GameObject:
