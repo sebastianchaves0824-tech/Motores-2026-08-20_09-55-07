@@ -123,7 +123,7 @@ AudioMixerController:
   - guid: 55ec2cc6bc5b646448061cec95192753
     name: MyExposedParam 3
   - guid: bfd398bfce40d3d4f91277e51bc277c1
-    name: MyExposedParam
+    name: MasterVolume
   - guid: c9ab39c0cd177fe458f71ff7ec9c380f
     name: MyExposedParam 2
   - guid: b66d3912854c7b843b4d73607ccec7ed
