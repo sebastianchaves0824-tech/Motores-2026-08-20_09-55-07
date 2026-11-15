@@ -767,9 +767,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VozGameOver
   audioSource: {fileID: 808698131}
   gameoverVoiceLines:
-  - {fileID: 8300000, guid: a00e3a4bb1545db43933223233d8f114, type: 3}
-  - {fileID: 8300000, guid: 7d60f65716ecf0643bb94f468e93ec67, type: 3}
-  - {fileID: 8300000, guid: 9996d9496842dea4ab825fbf0cb2726b, type: 3}
+  - {fileID: 8300000, guid: d88c0c4badbdfd94e8e8ad8369861f27, type: 3}
+  - {fileID: 8300000, guid: 67d891c3085677443ade28e17e750a7f, type: 3}
+  - {fileID: 8300000, guid: c37fc1d1558e36141b859a42a4923bca, type: 3}
   grupoMixer: {fileID: 3323425865043909038, guid: d89e91d9c56e3594aa60d5df35a4db58, type: 2}
 --- !u!1 &1247893622
 GameObject:
@@ -1412,7 +1412,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 594a8b82df8f3c24f81e6dd0435fcf7e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
