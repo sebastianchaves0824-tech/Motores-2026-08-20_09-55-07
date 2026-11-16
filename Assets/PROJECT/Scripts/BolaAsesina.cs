@@ -19,9 +19,13 @@ public class BolaAsesina : MonoBehaviour
     private int currentWaypointIndex = 0;
     private float currentSpeed;
     private bool isChasing = false;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
     void Start()
     {
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
         currentSpeed = baseSpeed;
     }
 
@@ -89,5 +93,13 @@ public class BolaAsesina : MonoBehaviour
             Debug.Log("¡La bola aplastó al jugador!");
             // player.GetComponent<PlayerHealth>().Die();
         }
+    }
+    public void ResetBola()
+    {
+        isChasing = false;
+        currentWaypointIndex = 0;
+        currentSpeed = baseSpeed;
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
     }
 }

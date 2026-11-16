@@ -12,6 +12,10 @@ public class PlayerHealth : MonoBehaviour
     [Header("Referencia a la UI")]
     [SerializeField] private HeartUI heartUI;
 
+    [Header("Configuración de Persecución")]
+    [SerializeField] private BolaAsesina bolaAsesina;
+    [SerializeField] private TriggerPersecusion triggerPersecusion;
+
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] damageVoiceLines; // Array para poner varias frases de daño
@@ -100,6 +104,16 @@ public class PlayerHealth : MonoBehaviour
         }
 
         transform.position = puntoSpawnActual;
+
+        if (bolaAsesina != null)
+        {
+            bolaAsesina.ResetBola();
+        }
+
+        if (triggerPersecusion != null)
+        {
+            triggerPersecusion.gameObject.SetActive(true);
+        }
     }
 
     private void Die()
@@ -108,9 +122,9 @@ public class PlayerHealth : MonoBehaviour
         onDeath?.Invoke();
     }
     public void CargarEscenaDerrota(string nombreEscena)
-{
-    SceneManager.LoadScene(nombreEscena);
-}
+    {
+        SceneManager.LoadScene(nombreEscena);
+    }
     private void PlayDamageVoiceLine()
     {
         // Verificamos que haya clips asignados y que el AudioSource no esté sonando ya 
