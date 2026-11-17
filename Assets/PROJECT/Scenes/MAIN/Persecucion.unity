@@ -4444,6 +4444,10 @@ PrefabInstance:
       propertyPath: particulaSalto
       value: 
       objectReference: {fileID: 783682405}
+    - target: {fileID: 338301832735256570, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1411793528519600010, guid: 195055cb076c02c4e8417806f757cd52, type: 3}
       propertyPath: persecucion_collider
       value: 
