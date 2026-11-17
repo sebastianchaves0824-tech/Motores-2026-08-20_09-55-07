@@ -1,58 +1,40 @@
 using UnityEngine;
-
 using UnityEngine.InputSystem;
-
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
-    // poner el header hace que quede lindo en el inspector de Unity, pero no hace nada más
     [Header("Movimiento")]
-    public float maxSpeed = 10f; // que tan rápido se va a mover la mulita
-    public float acceleration = 60f; //
+    public float maxSpeed = 10f;
+    public float acceleration = 60f;
     public float deceleration = 50f;
+    [Tooltip("Qué tan rápido gira la Mulita hacia la dirección de avance")]
+    public float turnSpeed = 15f;
     
-    //ayudin para el insopector
-    [Header("Referencias de Transformación Visual")]
-    [Tooltip("Arrastrá el objeto padre de la mulita parada (ej: boina o cuerpo)")]
-    [SerializeField] private GameObject visualDePie;
+    [Header("Animación y Transformación")]
+    [Tooltip("Arrastrá el componente Animator del Player")]
+    [SerializeField] private Animator animator;
 
-    [Tooltip("Arrastrá el objeto de la esfera (mulita esfera)")]
-    [SerializeField] private GameObject visualEsfera;
-
-    [Tooltip("Velocidad mínima en el plano horizontal para transformarse")]
+    [Tooltip("Velocidad mínima en el plano horizontal para transformarse en esfera")]
     [SerializeField] private float umbralMovimiento = 0.2f;
-    
 
     [Header("Salto")]
     public float jumpForce = 12f;
-    [Range(0f, 1f)] // esto nos permite generar un slider en el inspector
-    [SerializeField] private float airControl = 0.6f; // cuanto vamos a poder mover a nuestro personaje en el aire 
+    [Range(0f, 1f)]
+    [SerializeField] private float airControl = 0.6f;
 
     [Header("Físicas y Gravedad")]
-    [SerializeField] private float gravityScale = 2.5f;     // Gravedad base multiplicada
-    [SerializeField] private float fallMultiplier = 2f;      // Gravedad extra al caer para evitar flotar
+    [SerializeField] private float gravityScale = 2.5f;
+    [SerializeField] private float fallMultiplier = 2f;
 
-    [Header("Ajustes de Pendiente")]                         
-    [Tooltip("Multiplicador extra de velocidad al bajar una pendiente")] 
-    //muestra un tooltip en el inspector para saber que
-    //modifica esta variable 
-    [SerializeField] private float bonusBajada = 1.5f;        // Porcentaje de velocidad extra al bajar una pendiente (1.5 = 150%)
+    [Header("Ajustes de Pendiente")]
+    [Tooltip("Multiplicador extra de velocidad al bajar una pendiente")]
+    [SerializeField] private float bonusBajada = 1.5f;
 
     [Tooltip("Porcentaje de velocidad retenida al subir (0.4 = 40%)")]
-    //muestra un tooltip en el inspector para saber que
-    //modifica esta variable
-
-    [Range(0.1f, 1f)] // esto nos permite generar un slider en el inspector
+    [Range(0.1f, 1f)]
     [SerializeField] private float penalizacionSubida = 0.4f;
-
-    [Header("Particulas")]
-
-    [SerializeField]  ParticleSystem particulaSalto;
-
-
-
 
     private Vector3 groundNormal = Vector3.up;
     private bool isJumping;
@@ -67,82 +49,62 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
-        
-
+        if (animator == null) animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        // leemos el input del teclado y lo guardamos en un vector3
         Vector2 input = playerInput.actions["Movement"].ReadValue<Vector2>();
         movementDirection = new Vector3(input.x, 0f, input.y).normalized;
-        // normalizo el vector de entrada
-        // ya que despues lo voy a multiplicar por la velocidad
-        // de otra manera podria hacer que yendo en diagonal sea mas rapido 
 
-        GroundCheck(); // en cada frame me fijo si está en el piso o no
-        ActualizarEstadoVisual(); // actualizamos el estado visual del personaje según si está en el piso o en el aire
+        GroundCheck();
+        ActualizarAnimacion();
     }
-        private void ActualizarEstadoVisual()
-    {
-        if (visualDePie == null || visualEsfera == null || rb == null) return;
 
-        // Si usás Unity 6 se usa rb.linearVelocity. Si tu versión da error, cambialo por rb.velocity
+    private void ActualizarAnimacion()
+    {
+        if (animator == null || rb == null) return;
+
         Vector3 velocidadPlana = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         bool estaMoviendose = velocidadPlana.magnitude > umbralMovimiento;
 
-        if (estaMoviendose)
-        {
-            // Rodando como esfera
-            if (visualDePie.activeSelf) visualDePie.SetActive(false);
-            if (!visualEsfera.activeSelf) visualEsfera.SetActive(true);
-        }
-        else
-        {
-            // Quieta de pie
-            if (!visualDePie.activeSelf) visualDePie.SetActive(true);
-            if (visualEsfera.activeSelf) visualEsfera.SetActive(false);
-        }
+        animator.SetBool("EsBola", estaMoviendose);
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
+        RotarHaciaMovimiento();
         CustomGravity();
+    }
 
-        
+    private void RotarHaciaMovimiento()
+    {
+        // Solo rotamos si el jugador está presionando alguna dirección
+        if (movementDirection.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
+        }
     }
 
     private void MovePlayer()
     {
         Vector3 actualVelocity = rb.linearVelocity;
         float currentMaxSpeed = CalcularVelocidadPorPendiente();
-        Vector3 targetVelocity = movementDirection * currentMaxSpeed; //definimos la velocidad deseada como el vector direccion por la magnitud que deseamos (maxspeed)
-        // para cambiar la velocidad del personaje vamos a definir la velocidad máxima a la que queremos llegar y luego 
-        // utilizar la funcion MoveTowards para que vaya llevando la velocidad hasta ese límite, con la tasa de cambio de velocityChange
-        float velocityChange;
-        if (movementDirection.magnitude > 0.01f)
-        {
-            velocityChange = acceleration;
-        }
-        else
-        {
-            velocityChange = deceleration;
-        }
-        // aca cambiamos la velocity change dependiendo si está saltando o en el piso
+        Vector3 targetVelocity = movementDirection * currentMaxSpeed;
+
+        float velocityChange = (movementDirection.magnitude > 0.01f) ? acceleration : deceleration;
+
         if (!isGrounded)
         {
-            velocityChange  = velocityChange * airControl; // al multiplicar por un número entre 0 y 1 lo que hacemos es reducir en ese porcentaje la tasa 
-                                                           // de cambio de la velocidad, así el personaje se mueve mas lento en el aire
+            velocityChange *= airControl;
         }
 
-        // acá conseguimos ese nuevo vector de velocidad
         Vector3 newVelocity = Vector3.MoveTowards(actualVelocity, targetVelocity, velocityChange * Time.fixedDeltaTime);
-
-        // en esta linea cambiamos efectivamente la velocidad del rigidbody, conservando la velocidad vertical para no modificar el salto
         rb.linearVelocity = new Vector3(newVelocity.x, actualVelocity.y, newVelocity.z);
     }
-        // Aca permitimos que superficies como el hielo modifiquen el frenado
+
     public void SetDeceleration(float nuevoValor)
     {
         deceleration = nuevoValor;
@@ -154,7 +116,6 @@ public class PlayerMovement : MonoBehaviour
     {
         estaEnHielo = false;
 
-        // Si salio del hielo porque salto, guarda el valor para restaurarlo recién cuando aterrice
         if (!isGrounded)
         {
             desaceleracionPendienteRestaurar = valorNormal;
@@ -164,63 +125,50 @@ public class PlayerMovement : MonoBehaviour
             deceleration = valorNormal;
         }
     }
+
     private void CustomGravity()
     {
-        // guardamos el valor de la gravedad de unity
         float baseGravity = Physics.gravity.y;
-
-        // aca elegimos la gravedad personalizada, usamos (gravityScale - 1) para que sea intuitivo de usar en el inspector para ir ajustando las variables
-        // por eso si gravityScale es 2 entonces la gravedad personalizada será el doble que la de unity
         float customGravity = baseGravity * (gravityScale - 1f);
 
-        // si el personaje está cayendo, le agregamos fuerza a la gravedad
         if (rb.linearVelocity.y < 0)
         {
-            // acá modificamos la gravedad personalizada si estamos cayendo, tal cual hicimos antes pero en vez de gravityScale usamos fallMultiplier 
             customGravity = baseGravity * (fallMultiplier - 1f);
         }
-        // acá lo que hacemos es añadirle gravedad en la subida si dejamos de apretar el botón de salto
         else if (rb.linearVelocity.y > 0 && !isJumping)
         {
-            // esto va a limitar la altura del salto, haciendo que apretar una vez salte menos que dejar apretado que salta completo
             customGravity = baseGravity * (fallMultiplier - 1f);
         }
 
-        // en este paso sumamos la gravedad personalizada a la velocidad del rigidbody
-        Vector3 newGravity = new Vector3(0,customGravity * Time.fixedDeltaTime,0);
-        rb.linearVelocity = rb.linearVelocity + newGravity;
+        Vector3 newGravity = new Vector3(0, customGravity * Time.fixedDeltaTime, 0);
+        rb.linearVelocity += newGravity;
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        // ni bien apretamos el boton de salto comprobamos si está en el piso y si es así saltamos
         if (context.started && isGrounded)
         {
             isJumping = true;
-            // antes de saltar ponemos la velocidad en 0, esto sirve para que si por alguna razon tenemos velocidad en y
-            // por ejemplo al bajar una pendiente, o por una plataforma que nos mueve para arriba
-            // no nos pase que el salto es distinto por eso, de esta manera siempre saltara lo mismo
-            crearParticulaSalto();
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            SoundFXManager.Instance.Play3DSound("JumpClip", transform.position, volume: 1f);
+            if (SoundFXManager.Instance != null)
+            {
+                SoundFXManager.Instance.Play3DSound("JumpClip", transform.position, volume: 1f);
+            }
         }
         if (context.canceled)
         {
             isJumping = false;
         }
-    } 
-private void GroundCheck()// esta es una forma "sencilla" de determinar si el personaje esta en el piso y puede saltar o no
-        // el raycast tira un rayo para abajo 
-        // si detecta un objeto Physics.Raycast nos devuelve un booleano con valor true y si no detecta nada nos devuelve false
-        // tambien nos permite obtener información del objeto que detecta, como la normal de la superficie, la distancia, etc
+    }
+
+    private void GroundCheck()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
         Debug.DrawRay(ray.origin, ray.direction * 1.1f, Color.green);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 1.1f))
         {
-            // Si estaba en el aire y acaba de aterrizar fuera del hielo, restaura la desaceleracion
             if (!isGrounded && desaceleracionPendienteRestaurar > 0f && !estaEnHielo)
             {
                 deceleration = desaceleracionPendienteRestaurar;
@@ -236,19 +184,15 @@ private void GroundCheck()// esta es una forma "sencilla" de determinar si el pe
             groundNormal = Vector3.up;
         }
     }
-    private float CalcularVelocidadPorPendiente()  
-    //aca vamos a calcular la velocidad máxima que puede tener el personaje 
-    //dependiendo de si está subiendo o bajando una pendiente
+
+    private float CalcularVelocidadPorPendiente()
     {
         if (!isGrounded || groundNormal == Vector3.up)
         {
             return maxSpeed;
         }
 
-        // Vector hacia donde cae la colina
         Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, groundNormal).normalized;
-
-        // Dot = +1 (Bajando la pendiente), Dot = -1 (Subiendo la pendiente)
         float slopeDot = Vector3.Dot(movementDirection, slopeDirection);
 
         if (slopeDot > 0.05f)
@@ -261,9 +205,5 @@ private void GroundCheck()// esta es una forma "sencilla" de determinar si el pe
         }
 
         return maxSpeed;
-    }
-    private void crearParticulaSalto()
-    {
-        particulaSalto.Play();
     }
 }
