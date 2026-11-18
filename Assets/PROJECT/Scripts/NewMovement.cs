@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Particulas")]
+
+    [SerializeField] ParticleSystem particulaSalto;
     [Header("Movimiento")]
     public float maxSpeed = 10f;
     public float acceleration = 60f;
@@ -149,6 +152,7 @@ public class PlayerMovement : MonoBehaviour
         if (context.started && isGrounded)
         {
             isJumping = true;
+            crearParticulaSalto();
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             if (SoundFXManager.Instance != null)
@@ -205,5 +209,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return maxSpeed;
+    }
+    private void crearParticulaSalto()
+    {
+        particulaSalto.Play();
     }
 }
